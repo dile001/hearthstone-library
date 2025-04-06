@@ -1,22 +1,32 @@
-export async function load({ fetch, url }) {
-	const page = Number(url.searchParams.get('page') ?? '1');
-	const pageSize = 24;
+import { cachedCards, cachedMetadata } from '$lib/stores/cards';
+import { get } from 'svelte/store';
 
-	const cardsRes = await fetch(`/api/cards?page=${page}&pageSize=${pageSize}`);
-	const metadataRes = await fetch('/api/metadata');
+export async function load({ fetch }) {
+	let cards, metadata;
 
-	if (!cardsRes.ok || !metadataRes.ok) throw new Error('Failed to load data');
+	if (get(cachedCards) && get(cachedMetadata)) {
+		cards = get(cachedCards);
+		metadata = get(cachedMetadata);
+	} else {
+		const cardsRes = await fetch('/api/cards');
+		const metadataRes = await fetch('/api/metadata');
 
-	const cardsData = await cardsRes.json();
-	const metadata = await metadataRes.json();
+		if (!cardsRes.ok || !metadataRes.ok) throw new Error('Failed to load data');
 
-	console.log('[DEBUG] Incoming page param:', page);
-	console.log('[DEBUG] Blizzard returned:', cardsData.page);
+		const cardsData = await cardsRes.json();
+		metadata = await metadataRes.json();
+		cards = cardsData.cards;
+
+		cachedCards.set(cards);
+		cachedMetadata.set(metadata);
+	}
+
+	const classMap = Object.fromEntries(
+		metadata.classes.map((cls: { id: number; name: string }) => [cls.id, cls.name])
+	);
 
 	return {
-		cards: cardsData.cards,
-		page,
-		pageCount: cardsData.pageCount,
-		metadata
+		cards,
+		classMap
 	};
 }

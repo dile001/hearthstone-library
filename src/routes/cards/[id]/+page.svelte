@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { favorites } from '$lib/stores/favorites';
+	import { goto } from '$app/navigation';
 	export let data;
 
 	const card = data.card;
@@ -19,11 +20,12 @@
 </script>
 
 <div class="max-w-5xl mx-auto px-4 py-10">
-	<a href="/cards" class="inline-block mb-6">
-		<button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-			← Back to all cards
-		</button>
-	</a>
+	<button
+		on:click={() => goto('/cards')}
+		class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+	>
+		← Back to all cards
+	</button>
 
 	<div class="flex items-center justify-between mb-6">
 		<h1 class="text-4xl font-bold text-white">{card.name}</h1>

@@ -43,17 +43,35 @@ async function fetchAccessToken(): Promise<string> {
 	return cachedToken!;
 }
 
-export async function GET({ url }) {
+export async function GET() {
 	const token = await fetchAccessToken();
-	const page = url.searchParams.get('page') ?? '1';
-	const pageSize = url.searchParams.get('pageSize') ?? '24'; // or 20
+	const pageSize = 1000;
 
-	const res = await fetch(`${API_URL}/hearthstone/cards?locale=en_US&page=${page}&pageSize=${pageSize}`, {
-		headers: {
-			Authorization: `Bearer ${token}`
+	const allCards = [];
+	let page = 1;
+	let totalPages = 1;
+
+	do {
+		const res = await fetch(
+			`${API_URL}/hearthstone/cards?locale=en_US&page=${page}&pageSize=${pageSize}`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			}
+		);
+
+		if (!res.ok) {
+			const err = await res.text();
+			throw new Error(`Failed to fetch cards page ${page}: ${err}`);
 		}
-	});
 
-	const data = await res.json();
-	return json(data);
+		const data = await res.json();
+
+		allCards.push(...data.cards);
+		totalPages = data.pageCount;
+		page++;
+	} while (page <= totalPages);
+
+	return json({ cards: allCards });
 }
