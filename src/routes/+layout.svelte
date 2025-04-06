@@ -1,7 +1,23 @@
 <script lang="ts">
 	import '../app.css';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
+	import { loading } from '$lib/stores/loading';
 
-	let { children } = $props();
+	beforeNavigate(() => {
+		loading.set(true);
+	});
+
+	afterNavigate(() => {
+		loading.set(false);
+	});
 </script>
 
-{@render children()}
+<slot />
+
+{#if $loading}
+	<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+		<div
+			class="h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent"
+		></div>
+	</div>
+{/if}

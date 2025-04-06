@@ -25,7 +25,7 @@
 		}
 		return Array.from(seen.entries()).map(([id, name]) => ({ id, name }));
 	});
-	
+
 	const filteredCards = derived(
 		[search, showOnlyFavorites, selectedMana, selectedClass, favorites, cards],
 		([$search, $showOnlyFavorites, $selectedMana, $selectedClass, $favorites, $cards]) => {
@@ -48,13 +48,10 @@
 		([$s, $f, $m, $c]) => $s === '' && !$f && $m === 'all' && $c === 'all'
 	);
 
-	const paginatedFilteredCards = derived(
-		[filteredCards, currentPage],
-		([$filtered, $page]) => {
-			const start = ($page - 1) * pageSize;
-			return $filtered.slice(start, start + pageSize);
-		}
-	);
+	const paginatedFilteredCards = derived([filteredCards, currentPage], ([$filtered, $page]) => {
+		const start = ($page - 1) * pageSize;
+		return $filtered.slice(start, start + pageSize);
+	});
 
 	function changePage(delta: number) {
 		currentPage.update((n) => Math.max(1, n + delta));
@@ -73,25 +70,25 @@
 	}
 </script>
 
-<div class="max-w-7xl mx-auto px-4 py-8">
-	<h1 class="text-4xl font-bold text-white mb-6">Hearthstone Cards</h1>
-	<div class="bg-slate-800 p-4 rounded-lg shadow mb-6 flex flex-wrap gap-4 items-center">
+<div class="mx-auto max-w-7xl px-4 py-8">
+	<h1 class="mb-6 text-4xl font-bold text-white">Hearthstone Cards</h1>
+	<div class="mb-6 flex flex-wrap items-center gap-4 rounded-lg bg-slate-800 p-4 shadow">
 		<input
 			type="text"
 			placeholder="Search cards..."
-			class="px-4 py-2 rounded bg-slate-700 text-white placeholder-gray-400 outline-none"
+			class="rounded bg-slate-700 px-4 py-2 text-white placeholder-gray-400 outline-none"
 			bind:value={$search}
 		/>
 		<label class="flex items-center gap-2 text-white">
 			<input type="checkbox" bind:checked={$showOnlyFavorites} /> Favorites only
 		</label>
-		<select bind:value={$selectedMana} class="px-3 py-2 rounded bg-slate-700 text-white">
+		<select bind:value={$selectedMana} class="rounded bg-slate-700 px-3 py-2 text-white">
 			<option value="all">All Mana</option>
 			{#each Array.from({ length: 11 }, (_, i) => i) as mana (mana)}
 				<option value={mana}>{mana}</option>
 			{/each}
 		</select>
-		<select bind:value={$selectedClass} class="px-3 py-2 rounded bg-slate-700 text-white">
+		<select bind:value={$selectedClass} class="rounded bg-slate-700 px-3 py-2 text-white">
 			<option value="all">All Classes</option>
 			{#each $classOptions as cls (cls.id)}
 				<option value={cls.id}>{cls.name}</option>
@@ -100,15 +97,17 @@
 		<button
 			on:click={resetFilters}
 			disabled={$filtersAreClear}
-			class="px-4 py-2 rounded transition {$filtersAreClear ? 'bg-gray-500 text-gray-300 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-red-700'}"
+			class="rounded px-4 py-2 transition {$filtersAreClear
+				? 'cursor-not-allowed bg-gray-500 text-gray-300'
+				: 'bg-red-600 text-white hover:bg-red-700'}"
 		>
 			Clear Filters
 		</button>
 	</div>
 
-	<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+	<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
 		{#each $paginatedFilteredCards as card (card.id)}
-			<div class="relative transition transform duration-200 hover:-translate-y-1 hover:shadow-xl">
+			<div class="relative transform transition duration-200 hover:-translate-y-1 hover:shadow-xl">
 				<button
 					on:click|stopPropagation={() => {
 						favorites.update((current) =>
@@ -117,7 +116,7 @@
 								: [...current, card.id]
 						);
 					}}
-					class="absolute top-2 right-2 z-10 text-xl hover:text-yellow-300 transition"
+					class="absolute top-2 right-2 z-10 text-xl transition hover:text-yellow-300"
 				>
 					{#if $favorites.includes(card.id)}⭐️{:else}☆{/if}
 				</button>
@@ -128,17 +127,23 @@
 		{/each}
 	</div>
 
-	<div class="flex justify-center mt-8 gap-4">
+	<div class="mt-8 flex justify-center gap-4">
 		{#if $currentPage > 1}
-			<button on:click={() => changePage(-1)} class="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600">
+			<button
+				on:click={() => changePage(-1)}
+				class="rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600"
+			>
 				← Previous
 			</button>
 		{/if}
-		<p class="text-white text-sm mt-2">
+		<p class="mt-2 text-sm text-white">
 			Page {$currentPage} of {$filteredPageCount}
 		</p>
 		{#if $currentPage < $filteredPageCount}
-			<button on:click={() => changePage(1)} class="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600">
+			<button
+				on:click={() => changePage(1)}
+				class="rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600"
+			>
 				Next →
 			</button>
 		{/if}

@@ -1,15 +1,16 @@
 import { cachedCards, cachedMetadata } from '$lib/stores/cards';
+import { browser } from '$app/environment';
 import { get } from 'svelte/store';
 
 export async function load({ fetch }) {
-	let cards, metadata;
+	let cards = get(cachedCards);
+	let metadata = get(cachedMetadata);
 
-	if (get(cachedCards) && get(cachedMetadata)) {
-		cards = get(cachedCards);
-		metadata = get(cachedMetadata);
-	} else {
-		const cardsRes = await fetch('/api/cards');
-		const metadataRes = await fetch('/api/metadata');
+	if (browser && (!cards || !metadata)) {
+		const [cardsRes, metadataRes] = await Promise.all([
+			fetch('/api/cards'),
+			fetch('/api/metadata')
+		]);
 
 		if (!cardsRes.ok || !metadataRes.ok) throw new Error('Failed to load data');
 
@@ -22,11 +23,11 @@ export async function load({ fetch }) {
 	}
 
 	const classMap = Object.fromEntries(
-		metadata.classes.map((cls: { id: number; name: string }) => [cls.id, cls.name])
+		(metadata?.classes ?? []).map((cls: { id: number; name: string }) => [cls.id, cls.name])
 	);
 
 	return {
-		cards,
+		cards: cards ?? [],
 		classMap
 	};
 }

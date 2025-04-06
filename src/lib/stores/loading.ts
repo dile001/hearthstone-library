@@ -1,3 +1,2 @@
 import { writable } from 'svelte/store';
-
-export const isNavigating = writable(false);
+export const loading = writable(false);

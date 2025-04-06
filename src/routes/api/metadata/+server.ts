@@ -1,8 +1,5 @@
 import { json } from '@sveltejs/kit';
-import {
-	PRIVATE_BLIZZARD_CLIENT_ID,
-	PRIVATE_BLIZZARD_CLIENT_SECRET
-} from '$env/static/private';
+import { PRIVATE_BLIZZARD_CLIENT_ID, PRIVATE_BLIZZARD_CLIENT_SECRET } from '$env/static/private';
 
 const TOKEN_URL = 'https://oauth.battle.net/token';
 const METADATA_URL = 'https://eu.api.blizzard.com/hearthstone/metadata?locale=en_US';

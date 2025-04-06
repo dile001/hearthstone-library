@@ -1,8 +1,6 @@
 import { writable } from 'svelte/store';
 
-const stored = typeof localStorage !== 'undefined'
-	? localStorage.getItem('favorites')
-	: null;
+const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('favorites') : null;
 
 const initial = stored ? JSON.parse(stored) : [];
 
