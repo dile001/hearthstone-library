@@ -5,7 +5,7 @@ Users can filter cards, view details, mark favorites, and access protected conte
 
 ## Live Demo
 
-🔗 [View Live on Vercel](https://hearthstone-library.vercel.app)
+[View Live on Vercel](https://hearthstone-library.vercel.app)
 
 ---
 
