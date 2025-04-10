@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writable, derived } from 'svelte/store';
 	import { favorites } from '$lib/stores/favorites';
+	import { goto } from '$app/navigation';
 
 	export let data: {
 		cards: Card[];
@@ -102,6 +103,13 @@
 				: 'bg-red-600 text-white hover:bg-red-700'}"
 		>
 			Clear Filters
+		</button>
+
+		<button
+			on:click={() => goto('/logout')}
+			class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
+		>
+			Logout
 		</button>
 	</div>
 
