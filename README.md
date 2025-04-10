@@ -1,38 +1,83 @@
-# sv
+# Hearthstone Library
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A sleek, responsive SvelteKit web application to browse Hearthstone cards using the Blizzard public API.  
+Users can filter cards, view details, mark favorites, and access protected content via secure login.
 
-## Creating a project
+## Live Demo
 
-If you're seeing this, you've probably already done this step. Congrats!
+🔗 [View Live on Vercel](https://hearthstone-library.vercel.app)
+
+---
+
+## Features
+
+- **Login System** with session cookie
+- **Client-side filtering** by:
+  - Search (card name)
+  - Class
+  - Mana cost
+  - Favorites
+- **Advanced reactivity** with `writable` and `derived` stores
+- **Dynamic routing** (`/cards/[id]`)
+- **Fully styled** with Tailwind CSS (dark theme by default)
+- **Responsive layout** for desktop and mobile
+- **External API Integration** with Blizzard Hearthstone API
+- **Deployed on Vercel**
+
+---
+
+## Technologies Used
+
+- [SvelteKit](https://kit.svelte.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- [Blizzard Hearthstone API](https://develop.battle.net/)
+- [Vercel Hosting](https://vercel.com)
+
+---
+
+## Setup & Development
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+  # Install dependencies
+  npm install
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+  # Start dev server
+  npm run dev
 ```
-
-## Building
-
-To create a production version of your app:
 
 ```bash
-npm run build
+  # Build for production
+  npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+## Login Credentials (Demo)
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Username: admin  
+Password: password123
+
+## File structure
+
+```
+src/
+│
+├── routes/
+│   ├── +page.svelte        # Landing page
+│   ├── login/              # Login page
+│   ├── logout/             # Logout handler
+│   └── cards/              # Card browser
+│       ├── +page.svelte
+│       └── [id]/           # Dynamic card details
+│
+├── lib/
+│   ├── stores/             # Svelte stores (favorites, user, loading)
+│   ├── server/             # Auth + Blizzard API functions
+│   └── types/              # TypeScript types
+└── app.css                 # Tailwind styles
+```
+
+## License
+
+MIT - Vasilije Dikic  
+Made for the Modern Web/Frontend Framework Course (FH Technikum Wien)

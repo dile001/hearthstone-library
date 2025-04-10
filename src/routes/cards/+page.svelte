@@ -73,23 +73,32 @@
 
 <div class="mx-auto max-w-7xl px-4 py-8">
 	<h1 class="mb-6 text-4xl font-bold text-white">Hearthstone Cards</h1>
-	<div class="mb-6 flex flex-wrap items-center gap-4 rounded-lg bg-slate-800 p-4 shadow">
+	<div
+		class="mb-6 flex flex-col flex-wrap items-center gap-4 rounded-lg bg-slate-800 p-4 shadow sm:flex-row sm:flex-nowrap sm:items-start"
+	>
 		<input
 			type="text"
 			placeholder="Search cards..."
-			class="rounded bg-slate-700 px-4 py-2 text-white placeholder-gray-400 outline-none"
+			class="w-full rounded bg-slate-700 px-4 py-2 text-white placeholder-gray-400 outline-none sm:w-auto"
 			bind:value={$search}
 		/>
-		<label class="flex items-center gap-2 text-white">
-			<input type="checkbox" bind:checked={$showOnlyFavorites} /> Favorites only
+		<label class="flex h-10 items-center gap-2 text-white">
+			<input type="checkbox" bind:checked={$showOnlyFavorites} class="accent-blue-600" />
+			Favorites only
 		</label>
-		<select bind:value={$selectedMana} class="rounded bg-slate-700 px-3 py-2 text-white">
+		<select
+			bind:value={$selectedMana}
+			class="w-full rounded bg-slate-700 px-3 py-2 text-white sm:w-auto"
+		>
 			<option value="all">All Mana</option>
 			{#each Array.from({ length: 11 }, (_, i) => i) as mana (mana)}
 				<option value={mana}>{mana}</option>
 			{/each}
 		</select>
-		<select bind:value={$selectedClass} class="rounded bg-slate-700 px-3 py-2 text-white">
+		<select
+			bind:value={$selectedClass}
+			class="w-full rounded bg-slate-700 px-3 py-2 text-white sm:w-auto"
+		>
 			<option value="all">All Classes</option>
 			{#each $classOptions as cls (cls.id)}
 				<option value={cls.id}>{cls.name}</option>
@@ -98,7 +107,7 @@
 		<button
 			on:click={resetFilters}
 			disabled={$filtersAreClear}
-			class="rounded px-4 py-2 transition {$filtersAreClear
+			class="w-full rounded px-4 py-2 transition sm:w-auto {$filtersAreClear
 				? 'cursor-not-allowed bg-gray-500 text-gray-300'
 				: 'bg-red-600 text-white hover:bg-red-700'}"
 		>
@@ -107,13 +116,13 @@
 
 		<button
 			on:click={() => goto('/logout')}
-			class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm"
+			class="mt-2 w-full rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700 sm:mt-0 sm:w-auto"
 		>
 			Logout
 		</button>
 	</div>
 
-	<div class="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
+	<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 		{#each $paginatedFilteredCards as card (card.id)}
 			<div class="relative transform transition duration-200 hover:-translate-y-1 hover:shadow-xl">
 				<button
@@ -139,7 +148,7 @@
 		{#if $currentPage > 1}
 			<button
 				on:click={() => changePage(-1)}
-				class="rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600"
+				class="w-full rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600 sm:w-auto"
 			>
 				← Previous
 			</button>
@@ -150,7 +159,7 @@
 		{#if $currentPage < $filteredPageCount}
 			<button
 				on:click={() => changePage(1)}
-				class="rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600"
+				class="w-full rounded bg-slate-700 px-4 py-2 text-white hover:bg-slate-600 sm:w-auto"
 			>
 				Next →
 			</button>
