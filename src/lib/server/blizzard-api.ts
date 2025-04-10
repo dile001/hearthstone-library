@@ -34,27 +34,18 @@ async function fetchAccessToken(): Promise<string> {
 
 export async function fetchCards(): Promise<Card[]> {
 	const token = await fetchAccessToken();
-	const allCards: Card[] = [];
-	const pageSize = 2000;
 
-	let page = 1;
-	let totalPages = 1;
+	const res = await fetch(`${API_URL}/hearthstone/cards?locale=en_US&page=1&pageSize=2000`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	});
 
-	do {
-		const res = await fetch(`${API_URL}/hearthstone/cards?locale=en_US&page=${page}&pageSize=${pageSize}`, {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		});
-
-		const data = await res.json();
-		allCards.push(...data.cards);
-		totalPages = data.pageCount;
-		page++;
-	} while (page <= totalPages);
-
-	return allCards;
+	const data = await res.json();
+	console.log('res', data.cards.length)
+	return data.cards;
 }
+
 
 export async function fetchMetadata(): Promise<any> {
 	const token = await fetchAccessToken();
