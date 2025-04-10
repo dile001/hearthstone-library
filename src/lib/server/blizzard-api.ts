@@ -35,7 +35,7 @@ async function fetchAccessToken(): Promise<string> {
 export async function fetchCards(): Promise<Card[]> {
 	const token = await fetchAccessToken();
 	const allCards: Card[] = [];
-	const pageSize = 100;
+	const pageSize = 2000;
 
 	let page = 1;
 	let totalPages = 1;
